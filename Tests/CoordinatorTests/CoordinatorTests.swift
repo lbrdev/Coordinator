@@ -1,11 +1,29 @@
-import XCTest
 @testable import Coordinator
+import Foundation
+import XCTest
 
 final class CoordinatorTests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(Coordinator().text, "Hello, World!")
+    func testSavingMeta() {
+        let coordinator = StubCoordinator()
+
+        coordinator.start(with: .first)
+
+        XCTAssertTrue(coordinator.meta == .first)
+    }
+
+    func testFinishing() {
+        let coordinatorA = StubCoordinator()
+        coordinatorA.start(with: .first)
+
+        let coordinatorB = StubCoordinator()
+        coordinatorB.onFinish = {
+            coordinatorA.remove($0)
+        }
+        
+        coordinatorA.add(coordinatorB)
+        coordinatorB.start(with: .second)
+        coordinatorB.finish()
+
+        XCTAssertTrue(coordinatorA.coordinators.isEmpty)
     }
 }
