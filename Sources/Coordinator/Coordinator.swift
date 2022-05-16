@@ -14,7 +14,7 @@ open class Coordinator<M: CoordinationMeta>: NSObject {
     /// Access can be reached by mutating functions.
     public internal(set) var coordinators: [AnyCoordinator] = []
 
-    /// Meta avaliable only after `start(with:)`.
+    /// - Important: Avaliable only after `start(with:)`.
     /// Before that it's `nil`.
     public var meta: M!
 

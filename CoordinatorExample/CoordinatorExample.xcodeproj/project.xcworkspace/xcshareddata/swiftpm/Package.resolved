@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "coordinator",
+      "kind" : "localSourceControl",
+      "location" : "/Users/ihorkandaurov/Dev/Coordinator",
+      "state" : {
+        "branch" : "main",
+        "revision" : "6310d7016f097f1a1f5bb42d8172c7111a4a00f8"
+      }
+    }
+  ],
+  "version" : 2
+}

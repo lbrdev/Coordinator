@@ -26,4 +26,8 @@ final class CoordinatorTests: XCTestCase {
 
         XCTAssertTrue(coordinatorA.coordinators.isEmpty)
     }
+    
+    func testNavigation() {
+        
+    }
 }
