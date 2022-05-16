@@ -13,7 +13,9 @@
 		333CBC2E28325B3A0003592C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 333CBC2C28325B3A0003592C /* Main.storyboard */; };
 		333CBC3028325B3C0003592C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 333CBC2F28325B3C0003592C /* Assets.xcassets */; };
 		333CBC3328325B3C0003592C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 333CBC3128325B3C0003592C /* LaunchScreen.storyboard */; };
-		333CBC3C28325B670003592C /* Coordinator in Frameworks */ = {isa = PBXBuildFile; productRef = 333CBC3B28325B670003592C /* Coordinator */; };
+		333CBC4228325C570003592C /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333CBC4128325C570003592C /* AppCoordinator.swift */; };
+		333CBC4428325E880003592C /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333CBC4328325E880003592C /* RootViewController.swift */; };
+		33EEBFD32832650E003E174F /* Coordinator in Frameworks */ = {isa = PBXBuildFile; productRef = 33EEBFD22832650E003E174F /* Coordinator */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +27,10 @@
 		333CBC2F28325B3C0003592C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		333CBC3228325B3C0003592C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		333CBC3428325B3C0003592C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		333CBC4128325C570003592C /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		333CBC4328325E880003592C /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		33EEBFB5283264D6003E174F /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
+		33EEBFD1283264FC003E174F /* Coordinator */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Coordinator; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,7 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				333CBC3C28325B670003592C /* Coordinator in Frameworks */,
+				33EEBFD32832650E003E174F /* Coordinator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,8 +48,10 @@
 		333CBC1A28325B3A0003592C = {
 			isa = PBXGroup;
 			children = (
+				33EEBFD1283264FC003E174F /* Coordinator */,
 				333CBC2528325B3A0003592C /* CoordinatorExample */,
 				333CBC2428325B3A0003592C /* Products */,
+				33EEBFB2283262DF003E174F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,6 +66,7 @@
 		333CBC2528325B3A0003592C /* CoordinatorExample */ = {
 			isa = PBXGroup;
 			children = (
+				333CBC4028325C4A0003592C /* Coordinators */,
 				333CBC2628325B3A0003592C /* AppDelegate.swift */,
 				333CBC2828325B3A0003592C /* SceneDelegate.swift */,
 				333CBC2A28325B3A0003592C /* ViewController.swift */,
@@ -67,6 +76,23 @@
 				333CBC3428325B3C0003592C /* Info.plist */,
 			);
 			path = CoordinatorExample;
+			sourceTree = "<group>";
+		};
+		333CBC4028325C4A0003592C /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				333CBC4128325C570003592C /* AppCoordinator.swift */,
+				333CBC4328325E880003592C /* RootViewController.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		33EEBFB2283262DF003E174F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				33EEBFB5283264D6003E174F /* Package.swift */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -86,7 +112,7 @@
 			);
 			name = CoordinatorExample;
 			packageProductDependencies = (
-				333CBC3B28325B670003592C /* Coordinator */,
+				33EEBFD22832650E003E174F /* Coordinator */,
 			);
 			productName = CoordinatorExample;
 			productReference = 333CBC2328325B3A0003592C /* CoordinatorExample.app */;
@@ -117,7 +143,6 @@
 			);
 			mainGroup = 333CBC1A28325B3A0003592C;
 			packageReferences = (
-				333CBC3A28325B670003592C /* XCRemoteSwiftPackageReference "Coordinator" */,
 			);
 			productRefGroup = 333CBC2428325B3A0003592C /* Products */;
 			projectDirPath = "";
@@ -146,6 +171,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				333CBC4428325E880003592C /* RootViewController.swift in Sources */,
+				333CBC4228325C570003592C /* AppCoordinator.swift in Sources */,
 				333CBC2B28325B3A0003592C /* ViewController.swift in Sources */,
 				333CBC2728325B3A0003592C /* AppDelegate.swift in Sources */,
 				333CBC2928325B3A0003592C /* SceneDelegate.swift in Sources */,
@@ -300,7 +327,6 @@
 				INFOPLIST_FILE = CoordinatorExample/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -328,7 +354,6 @@
 				INFOPLIST_FILE = CoordinatorExample/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -367,21 +392,9 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		333CBC3A28325B670003592C /* XCRemoteSwiftPackageReference "Coordinator" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "file:///Users/ihorkandaurov/Dev/Coordinator";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		333CBC3B28325B670003592C /* Coordinator */ = {
+		33EEBFD22832650E003E174F /* Coordinator */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 333CBC3A28325B670003592C /* XCRemoteSwiftPackageReference "Coordinator" */;
 			productName = Coordinator;
 		};
 /* End XCSwiftPackageProductDependency section */

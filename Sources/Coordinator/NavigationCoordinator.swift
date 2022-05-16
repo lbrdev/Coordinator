@@ -15,6 +15,7 @@ open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigat
         case present(UIViewController)
         case push(UIViewController)
         case popTo(UIViewController)
+        case set([UIViewController])
         case dismiss
         case root
         case pop
@@ -58,6 +59,9 @@ open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigat
             navigationController.popViewController(animated: animated, completion: completion)
         case let .popTo(controller):
             navigationController.popToViewController(controller, animated: animated, completion: completion)
+        case let .set(controllers):
+            navigationController.setViewControllers(controllers, animated: animated)
+            completion?()
         }
     }
 
