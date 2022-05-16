@@ -21,48 +21,63 @@ open class Coordinator<M: CoordinationMeta>: NSObject {
     /// Callback that triggers after `finish()`.
     public var onFinish: ((Coordinator<M>) -> Void)?
 
+    public internal(set) var parent: AnyCoordinator?
+
+    open var debug: Bool { return false }
+
     override public init() { super.init() }
+
+    deinit {
+        if debug {
+            print("Deinit coordinator \(String(describing: self))")
+        }
+    }
 
     open func start(with meta: M) {
         self.meta = meta
     }
 
     open func finish() {
-        self.onFinish?(self)
+        onFinish?(self)
     }
 
     // MARK: - Operations with sub-coordinators
 
     /// Appends `coordinators` whith a new one.
-    func add<M: CoordinationMeta, C: Coordinator<M>>(
+    public func add<M: CoordinationMeta, C: Coordinator<M>>(
         _ coordinator: C
     ) {
-        coordinators.append(AnyCoordinator(coordinator))
+        coordinators.append(coordinator.asAny)
+        coordinator.parent = asAny
     }
 
     /// Removes a coordiantor from `coordinators` using type.
-    func remove<M: CoordinationMeta, C: Coordinator<M>>(
+    public func remove<M: CoordinationMeta, C: Coordinator<M>>(
         _ coordinatorType: C.Type
     ) {
         coordinators.removeAll { type(of: $0.coordinator) == coordinatorType }
     }
 
     /// Removes a coordiantor from `coordinators` using coordinator instance.
-    func remove<M: CoordinationMeta, C: Coordinator<M>>(
+    public func remove<M: CoordinationMeta, C: Coordinator<M>>(
         _ coordinator: C
     ) {
         remove(type(of: coordinator))
     }
 
     /// Removes a coordiantor from `coordinators` using it's own meta.
-    func remove<M: CoordinationMeta>(
+    public func remove<M: CoordinationMeta>(
         _ metaType: M.Type
     ) {
         coordinators.removeAll { $0.metaType == metaType }
     }
 
+    public func remove(_ anyCoordinator: AnyCoordinator) {
+        coordinators.removeAll { $0.metaType == anyCoordinator.metaType }
+    }
+
     /// Removes all coordiantors from `coordinators`.
-    func removeAll() {
+    public func removeAll() {
         coordinators.removeAll()
     }
 }

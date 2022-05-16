@@ -21,8 +21,7 @@ let package = Package(
     targets: [
         .target(
             name: "Coordinator",
-            dependencies: [],
-            exclude: ["CoordinatorExample"]
+            dependencies: []
         ),
         .testTarget(
             name: "CoordinatorTests",

@@ -16,6 +16,8 @@
 		333CBC4228325C570003592C /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333CBC4128325C570003592C /* AppCoordinator.swift */; };
 		333CBC4428325E880003592C /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333CBC4328325E880003592C /* RootViewController.swift */; };
 		33EEBFD32832650E003E174F /* Coordinator in Frameworks */ = {isa = PBXBuildFile; productRef = 33EEBFD22832650E003E174F /* Coordinator */; };
+		33EEBFDD28326B51003E174F /* SecondCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EEBFDC28326B51003E174F /* SecondCoordinator.swift */; };
+		33EEBFDF28326C1B003E174F /* StateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EEBFDE28326C1B003E174F /* StateViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +33,8 @@
 		333CBC4328325E880003592C /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		33EEBFB5283264D6003E174F /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		33EEBFD1283264FC003E174F /* Coordinator */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Coordinator; path = ..; sourceTree = "<group>"; };
+		33EEBFDC28326B51003E174F /* SecondCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondCoordinator.swift; sourceTree = "<group>"; };
+		33EEBFDE28326C1B003E174F /* StateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,8 +85,8 @@
 		333CBC4028325C4A0003592C /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
-				333CBC4128325C570003592C /* AppCoordinator.swift */,
-				333CBC4328325E880003592C /* RootViewController.swift */,
+				33EEBFDB28326B42003E174F /* Second */,
+				33EEBFDA28326B3C003E174F /* App */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -93,6 +97,24 @@
 				33EEBFB5283264D6003E174F /* Package.swift */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		33EEBFDA28326B3C003E174F /* App */ = {
+			isa = PBXGroup;
+			children = (
+				333CBC4328325E880003592C /* RootViewController.swift */,
+				333CBC4128325C570003592C /* AppCoordinator.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		33EEBFDB28326B42003E174F /* Second */ = {
+			isa = PBXGroup;
+			children = (
+				33EEBFDC28326B51003E174F /* SecondCoordinator.swift */,
+				33EEBFDE28326C1B003E174F /* StateViewController.swift */,
+			);
+			path = Second;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -172,7 +194,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				333CBC4428325E880003592C /* RootViewController.swift in Sources */,
+				33EEBFDF28326C1B003E174F /* StateViewController.swift in Sources */,
 				333CBC4228325C570003592C /* AppCoordinator.swift in Sources */,
+				33EEBFDD28326B51003E174F /* SecondCoordinator.swift in Sources */,
 				333CBC2B28325B3A0003592C /* ViewController.swift in Sources */,
 				333CBC2728325B3A0003592C /* AppDelegate.swift in Sources */,
 				333CBC2928325B3A0003592C /* SceneDelegate.swift in Sources */,
@@ -251,7 +275,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -305,7 +329,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -329,6 +353,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -356,6 +381,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigationControllerDelegate {
+/// UINavigation stack coordinator with auto finish
+open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigationControllerDelegate, UIAdaptivePresentationControllerDelegate {
     open var navigationController: UINavigationController
 
     public enum NavigationAction {
@@ -16,12 +17,14 @@ open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigat
         case push(UIViewController)
         case popTo(UIViewController)
         case set([UIViewController])
-        case dismiss
+        case dismissTop
+        case dismissAll
         case root
         case pop
     }
 
-    open internal(set) var viewControllers: [UIViewController] = []
+    public internal(set) var viewControllers: [UIViewController] = []
+    public internal(set) var presentedViewControllers: [UIViewController] = []
 
     public init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -38,6 +41,8 @@ open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigat
         navigationController.delegate = nil
         navigationController.viewControllers.removeAll { viewControllers.contains($0) }
         viewControllers = []
+        presentedViewControllers = []
+        parent?.remove(asAny)
         super.finish()
     }
 
@@ -48,23 +53,41 @@ open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigat
     ) {
         switch action {
         case let .present(controller):
-            navigationController.present(controller, animated: animated, completion: completion)
-        case .dismiss:
-            navigationController.dismiss(animated: animated)
+            presentedViewControllers.append(controller)
+            controller.presentationController?.delegate = self
+            navigationController.visibleViewController?.present(controller, animated: animated, completion: completion)
+        case .dismissTop:
+            presentedViewControllers.removeLast()
+            navigationController.visibleViewController?.dismiss(animated: animated, completion: completion)
+            if presentedViewControllers.isEmpty && viewControllers.isEmpty {
+                finish()
+            }
+        case .dismissAll:
+            presentedViewControllers = []
+            navigationController.topViewController?.dismiss(animated: animated, completion: completion)
+            if viewControllers.isEmpty {
+                finish()
+            }
         case let .push(controller):
+            viewControllers.append(controller) // Updating of viewControllers
             navigationController.pushViewController(controller, animated: animated, completion: completion)
         case .root:
+            // Updating of `viewControllers` observed by `pop(to destination:)`
             navigationController.popToRootViewController(animated: animated, completion: completion)
         case .pop:
+            // Updating of `viewControllers` observed by `pop(to destination:)`
             navigationController.popViewController(animated: animated, completion: completion)
         case let .popTo(controller):
+            // Updating of `viewControllers` observed by `pop(to destination:)`
             navigationController.popToViewController(controller, animated: animated, completion: completion)
         case let .set(controllers):
+            viewControllers = controllers
             navigationController.setViewControllers(controllers, animated: animated)
             completion?()
         }
     }
 
+    // Pop detection
     open func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
         // Detection of animated transition
         guard let sender = navigationController.transitionCoordinator?.viewController(forKey: .from) else { return }
@@ -96,5 +119,13 @@ open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigat
               destinationIndex < lastIndex else { return }
 
         viewControllers.removeSubrange(destinationIndex ... lastIndex)
+    }
+    
+    // Modal dismiss detection
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        presentedViewControllers.removeLast()
+        if presentedViewControllers.isEmpty && viewControllers.isEmpty {
+            finish()
+        }
     }
 }

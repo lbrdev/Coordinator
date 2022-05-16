@@ -9,12 +9,21 @@ import Foundation
 
 /// Type erasure for `Coordinator`
 public class AnyCoordinator {
-    let coordinator: Any
-    var metaType: CoordinationMeta.Type?
-    let id: String
+    public let coordinator: Any
+    public var metaType: CoordinationMeta.Type
+    public let id: String
 
-    init<M: CoordinationMeta, C: Coordinator<M>>(_ coordinator: C) {
+    public func remove(_ anyCoordinator: AnyCoordinator) {
+        removeAction(anyCoordinator)
+    }
+
+    private let removeAction: (AnyCoordinator) -> Void
+
+    public init<M: CoordinationMeta, C: Coordinator<M>>(_ coordinator: C) {
         self.coordinator = coordinator
+        removeAction = { [unowned coordinator] anyCoordinator in
+            coordinator.remove(anyCoordinator)
+        }
         metaType = M.self
         id = String(describing: C.self)
     }
@@ -27,5 +36,11 @@ extension AnyCoordinator: Equatable, Hashable {
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+}
+
+public extension Coordinator {
+    var asAny: AnyCoordinator {
+        AnyCoordinator(self)
     }
 }
