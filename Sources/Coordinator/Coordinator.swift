@@ -7,77 +7,97 @@
 
 import Foundation
 
-/// Base class to operate with flow using coordination pattern
-open class Coordinator<M: CoordinationMeta>: NSObject {
-    /// Property to store type-erased coordinators.
-    ///
-    /// Access can be reached by mutating functions.
-    public internal(set) var coordinators: [AnyCoordinator] = []
-
-    /// - Important: Avaliable only after `start(with:)`.
-    /// Before that it's `nil`.
-    public var meta: M!
-
-    /// Callback that triggers after `finish()`.
-    public var onFinish: ((Coordinator<M>) -> Void)?
-
-    public internal(set) var parent: AnyCoordinator?
-
-    open var debug: Bool { return false }
-
-    override public init() { super.init() }
-
-    deinit {
-        if debug {
-            print("Deinit coordinator \(String(describing: self))")
-        }
-    }
-
-    open func start(with meta: M) {
-        self.meta = meta
-    }
-
-    open func finish() {
-        onFinish?(self)
-    }
-
-    // MARK: - Operations with sub-coordinators
-
+public protocol MutableCoordinator: AnyObject {
+    var coordinators: [AnyCoordinator] { get set }
+    var asAny: AnyCoordinator { get }
     /// Appends `coordinators` whith a new one.
-    public func add<M: CoordinationMeta, C: Coordinator<M>>(
+    func add<R: Route, C: Coordinator<R>>(_ coordinator: C)
+    /// Removes a coordiantor from `coordinators` using type.
+    func remove<R: Route, C: Coordinator<R>>(_ coordinatorType: C.Type)
+    /// Removes a coordiantor from `coordinators` using coordinator instance.
+    func remove<R: Route, C: Coordinator<R>>(_ coordinator: C)
+    func remove(_ anyCoordinator: AnyCoordinator)
+    /// Removes all coordiantors from `coordinators`.
+    func removeAll()
+}
+
+public extension MutableCoordinator {
+    func add<R: Route, C: Coordinator<R>>(
         _ coordinator: C
     ) {
         coordinators.append(coordinator.asAny)
         coordinator.parent = asAny
     }
 
-    /// Removes a coordiantor from `coordinators` using type.
-    public func remove<M: CoordinationMeta, C: Coordinator<M>>(
+    func remove<R: Route, C: Coordinator<R>>(
         _ coordinatorType: C.Type
     ) {
         coordinators.removeAll { type(of: $0.coordinator) == coordinatorType }
     }
 
-    /// Removes a coordiantor from `coordinators` using coordinator instance.
-    public func remove<M: CoordinationMeta, C: Coordinator<M>>(
+    func remove<R: Route, C: Coordinator<R>>(
         _ coordinator: C
     ) {
         remove(type(of: coordinator))
     }
 
-    /// Removes a coordiantor from `coordinators` using it's own meta.
-    public func remove<M: CoordinationMeta>(
-        _ metaType: M.Type
-    ) {
-        coordinators.removeAll { $0.metaType == metaType }
+    func remove(_ anyCoordinator: AnyCoordinator) {
+        coordinators.removeAll { $0.id == anyCoordinator.id }
     }
 
-    public func remove(_ anyCoordinator: AnyCoordinator) {
-        coordinators.removeAll { $0.metaType == anyCoordinator.metaType }
-    }
-
-    /// Removes all coordiantors from `coordinators`.
-    public func removeAll() {
+    func removeAll() {
         coordinators.removeAll()
+    }
+}
+
+/// Base class to operate with flow using coordination pattern
+open class Coordinator<R: Route>: NSObject, MutableCoordinator {
+    /// Property to store type-erased coordinators.
+    ///
+    /// Use mutating functions.
+    public var coordinators: [AnyCoordinator] = []
+
+    /// Callback that triggers after `finish()`.
+    public var onFinish: ((Coordinator<R>) -> Void)?
+
+    /// Callback that triggers after `start(with)`.
+    public var onStart: ((R) -> Void)?
+
+    /// Parent that holds current coordinator
+    public internal(set) var parent: AnyCoordinator?
+
+    public var asAny: AnyCoordinator {
+        AnyCoordinator(self)
+    }
+
+    /// Override to see a log messages
+    open var debug: Bool { return false }
+
+    override public init() {
+        super.init()
+        if debug {
+            print("Init coordinator: \(String(describing: self))")
+        }
+    }
+
+    deinit {
+        if debug {
+            print("Deinit coordinator: \(String(describing: self))")
+        }
+    }
+
+    /// Override this method to get access to route
+    open func start(with route: R) {
+        if debug {
+            print("Coordinator started with route: \(route)")
+        }
+        onStart?(route)
+    }
+
+    open func finish() {
+        if debug {
+            print("Coordinator is finished: \(String(describing: self))")
+        }
+        onFinish?(self)
     }
 }

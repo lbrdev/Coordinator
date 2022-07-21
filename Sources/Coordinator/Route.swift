@@ -1,5 +1,5 @@
 //
-//  CoordinationMeta.swift
+//  Route.swift
 //
 //
 //  Created by Ihor Kandaurov on 15.05.2022.
@@ -7,4 +7,4 @@
 
 import Foundation
 
-public protocol CoordinationMeta {}
+public protocol Route {}
