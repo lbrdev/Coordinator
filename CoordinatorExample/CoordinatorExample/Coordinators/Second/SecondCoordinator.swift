@@ -8,16 +8,16 @@
 import Coordinator
 import UIKit
 
-enum SecondRoute: Route {
+enum SecondMeta: CoordinationMeta {
     case firstState
     case secondState
 }
 
-class SecondCoordinator: NavigationCoordinator<SecondRoute> {
-    override func start(with route: SecondRoute) {
-        super.start(with: route)
+class SecondCoordinator: NavigationCoordinator<SecondMeta> {
+    override func start(with meta: SecondMeta) {
+        super.start(with: meta)
 
-        switch route {
+        switch meta {
         case .firstState:
             launchFirstState()
         case .secondState:
@@ -26,7 +26,7 @@ class SecondCoordinator: NavigationCoordinator<SecondRoute> {
     }
 
     override var debug: Bool {
-        return true 
+        return true
     }
 
     private func launchFirstState() {

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 /// UINavigation stack coordinator with auto finish
-open class NavigationCoordinator<R: Route>: Coordinator<R>, UINavigationControllerDelegate, UIAdaptivePresentationControllerDelegate {
+open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigationControllerDelegate, UIAdaptivePresentationControllerDelegate {
     open var navigationController: UINavigationController
 
     public enum NavigationAction {
@@ -20,7 +20,6 @@ open class NavigationCoordinator<R: Route>: Coordinator<R>, UINavigationControll
         case dismissTop
         case dismissAll
         case root
-        case first
         case pop
     }
 
@@ -32,8 +31,8 @@ open class NavigationCoordinator<R: Route>: Coordinator<R>, UINavigationControll
         super.init()
     }
 
-    override open func start(with route: R) {
-        super.start(with: route)
+    override open func start(with meta: M) {
+        super.start(with: meta)
 
         navigationController.delegate = self
     }
@@ -121,7 +120,7 @@ open class NavigationCoordinator<R: Route>: Coordinator<R>, UINavigationControll
 
         viewControllers.removeSubrange(destinationIndex ... lastIndex)
     }
-
+    
     // Modal dismiss detection
     public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         presentedViewControllers.removeLast()

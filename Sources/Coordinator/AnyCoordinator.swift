@@ -8,30 +8,24 @@
 import Foundation
 
 /// Type erasure for `Coordinator`
-public class AnyCoordinator: Identifiable {
+public class AnyCoordinator {
     public let coordinator: Any
+    public var metaType: CoordinationMeta.Type
     public let id: String
 
     public func remove(_ anyCoordinator: AnyCoordinator) {
         removeAction(anyCoordinator)
     }
 
-    public func start<R: Route>(with route: R) {
-        startAction(route)
-    }
-
     private let removeAction: (AnyCoordinator) -> Void
-    private let startAction: (Route) -> Void
 
-    public init<R: Route, C: Coordinator<R>>(_ coordinator: C) {
+    public init<M: CoordinationMeta, C: Coordinator<M>>(_ coordinator: C) {
         self.coordinator = coordinator
         removeAction = { [unowned coordinator] anyCoordinator in
             coordinator.remove(anyCoordinator)
         }
-        startAction = { [unowned coordinator] route in
-            coordinator.start(with: route as! R)
-        }
-        id = String(describing: ObjectIdentifier(coordinator))
+        metaType = M.self
+        id = String(describing: C.self)
     }
 }
 
@@ -42,5 +36,11 @@ extension AnyCoordinator: Equatable, Hashable {
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+}
+
+public extension Coordinator {
+    var asAny: AnyCoordinator {
+        AnyCoordinator(self)
     }
 }

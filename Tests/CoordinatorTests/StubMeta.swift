@@ -8,7 +8,7 @@
 import Foundation
 import Coordinator
 
-enum StubMeta: Route {
+enum StubMeta: CoordinationMeta {
     case first
     case second
 }

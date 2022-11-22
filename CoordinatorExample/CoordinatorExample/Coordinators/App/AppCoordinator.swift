@@ -8,11 +8,9 @@
 import Coordinator
 import UIKit
 
-enum AppRoute: Route {
-    case standart
-}
+struct AppMeta: CoordinationMeta {}
 
-class AppCoordinator: NavigationCoordinator<AppRoute> {
+class AppCoordinator: NavigationCoordinator<AppMeta> {
     private let window: UIWindow
 
     init(window: UIWindow) {
@@ -20,23 +18,21 @@ class AppCoordinator: NavigationCoordinator<AppRoute> {
         super.init(navigationController: UINavigationController())
     }
 
-    override func start(with route: AppRoute) {
-        super.start(with: route)
+    override func start(with meta: AppMeta) {
+        super.start(with: meta)
 
         let root = RootViewController()
         navigate(to: .set([root]))
         root.push = { [unowned self] in
             self.startSecondPush()
         }
-
+        
         root.present = { [unowned self] in
             self.startSecondPresent()
         }
 
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
-        
-        coordinators.first?.start(with: route)
     }
 
     private func startSecondPush() {
@@ -44,7 +40,7 @@ class AppCoordinator: NavigationCoordinator<AppRoute> {
         add(secondCoordinator)
         secondCoordinator.start(with: .firstState)
     }
-
+    
     private func startSecondPresent() {
         let secondCoordinator = SecondCoordinator(navigationController: navigationController)
         add(secondCoordinator)
