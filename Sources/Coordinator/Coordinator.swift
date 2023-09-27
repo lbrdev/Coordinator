@@ -5,6 +5,7 @@
 //  Created by Ihor Kandaurov on 15.05.2022.
 //
 
+import Combine
 import Foundation
 
 /// Base class to operate with flow using coordination pattern
@@ -21,17 +22,11 @@ open class Coordinator<M: CoordinationMeta>: NSObject {
     /// Callback that triggers after `finish()`.
     public var onFinish: ((Coordinator<M>) -> Void)?
 
-    public internal(set) var parent: AnyCoordinator?
+    public internal(set) weak var parent: AnyCoordinator?
 
-    open var debug: Bool { return false }
+    var cancelBag = Set<AnyCancellable>()
 
     override public init() { super.init() }
-
-    deinit {
-        if debug {
-            print("Deinit coordinator \(String(describing: self))")
-        }
-    }
 
     open func start(with meta: M) {
         self.meta = meta
@@ -44,7 +39,7 @@ open class Coordinator<M: CoordinationMeta>: NSObject {
     // MARK: - Operations with sub-coordinators
 
     /// Appends `coordinators` whith a new one.
-    public func add<M: CoordinationMeta, C: Coordinator<M>>(
+    public func add<T: CoordinationMeta, C: Coordinator<T>>(
         _ coordinator: C
     ) {
         coordinators.append(coordinator.asAny)
@@ -52,22 +47,22 @@ open class Coordinator<M: CoordinationMeta>: NSObject {
     }
 
     /// Removes a coordiantor from `coordinators` using type.
-    public func remove<M: CoordinationMeta, C: Coordinator<M>>(
+    public func remove<T: CoordinationMeta, C: Coordinator<T>>(
         _ coordinatorType: C.Type
     ) {
         coordinators.removeAll { type(of: $0.coordinator) == coordinatorType }
     }
 
     /// Removes a coordiantor from `coordinators` using coordinator instance.
-    public func remove<M: CoordinationMeta, C: Coordinator<M>>(
+    public func remove<T: CoordinationMeta, C: Coordinator<T>>(
         _ coordinator: C
     ) {
         remove(type(of: coordinator))
     }
 
     /// Removes a coordiantor from `coordinators` using it's own meta.
-    public func remove<M: CoordinationMeta>(
-        _ metaType: M.Type
+    public func remove<T: CoordinationMeta>(
+        _ metaType: T.Type
     ) {
         coordinators.removeAll { $0.metaType == metaType }
     }

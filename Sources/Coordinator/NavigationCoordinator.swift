@@ -15,7 +15,7 @@ open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigat
     public enum NavigationAction {
         case present(UIViewController)
         case push(UIViewController)
-        case popTo(UIViewController)
+        case popTo(UIViewController.Type)
         case set([UIViewController])
         case dismissTop
         case dismissAll
@@ -25,6 +25,8 @@ open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigat
 
     public internal(set) var viewControllers: [UIViewController] = []
     public internal(set) var presentedViewControllers: [UIViewController] = []
+    
+    private var transitioning: UIViewControllerAnimatedTransitioning?
 
     public init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -49,8 +51,10 @@ open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigat
     open func navigate(
         to action: NavigationAction,
         animated: Bool = true,
+        transitioning: UIViewControllerAnimatedTransitioning? = nil,
         completion: (() -> Void)? = nil
     ) {
+        self.transitioning = transitioning
         switch action {
         case let .present(controller):
             presentedViewControllers.append(controller)
@@ -79,7 +83,8 @@ open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigat
             navigationController.popViewController(animated: animated, completion: completion)
         case let .popTo(controller):
             // Updating of `viewControllers` observed by `pop(to destination:)`
-            navigationController.popToViewController(controller, animated: animated, completion: completion)
+            guard let to = viewControllers.first(where: { type(of: $0) == controller }) else { return }
+            navigationController.popToViewController(to, animated: animated, completion: completion)
         case let .set(controllers):
             viewControllers = controllers
             navigationController.setViewControllers(controllers, animated: animated)
@@ -107,18 +112,17 @@ open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigat
 
         guard destination !== viewControllers.last else { return }
 
-        // Check if sender is in our coordination stack
+        // Check if destination controller is in our navigation array
         guard let destinationIndex = viewControllers.firstIndex(of: destination) else {
-            // If it's not, we're probably focused in another `NavigationCoordinator`
+            // If it's not, we're probably going to another `NavigationCoordinator`
             finish()
             return
         }
 
         // Destination index should be lower than last index in our stack
-        guard let lastIndex = viewControllers.indices.last,
-              destinationIndex < lastIndex else { return }
+        guard let lastIndex = viewControllers.indices.last, destinationIndex < lastIndex else { return }
 
-        viewControllers.removeSubrange(destinationIndex ... lastIndex)
+        viewControllers.removeSubrange((destinationIndex + 1) ... lastIndex)
     }
     
     // Modal dismiss detection
@@ -127,5 +131,22 @@ open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigat
         if presentedViewControllers.isEmpty && viewControllers.isEmpty {
             finish()
         }
+    }
+    
+    public func navigationController(
+        _ navigationController: UINavigationController,
+        animationControllerFor operation: UINavigationController.Operation,
+        from fromVC: UIViewController,
+        to toVC: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+        switch operation {
+        case .none: break
+        case .push:
+            return transitioning
+        case .pop:
+            return transitioning
+        @unknown default: break
+        }
+        return nil
     }
 }
