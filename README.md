@@ -50,7 +50,7 @@ class MyCoordinator: NavigationCoordinator<MyMeta> {
 3. Put the start of root coordintor in scene delegate as example:
 ```swift
     // must be strong reference
-    var coordinator: AppCoordinator?
+    var coordinator: MyCoordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else {
