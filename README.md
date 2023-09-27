@@ -24,7 +24,7 @@ To get started with the Coordinator library, follow these steps:
    import Coordinator
 ```
 2. Create a coordinator class that inherits to the Coordinator or NavigationCoordinator. This class will be responsible for coordinating the navigation between your view controllers.
-```
+```swift
 enum MyMeta: CoordinationMeta {
     case login
 }
@@ -48,7 +48,7 @@ class MyCoordinator: NavigationCoordinator<MyMeta> {
 ```
 
 3. Put the start of root coordintor in scene delegate as example:
-```
+```swift
     // must be strong reference
     var coordinator: AppCoordinator?
 
@@ -66,14 +66,14 @@ class MyCoordinator: NavigationCoordinator<MyMeta> {
 
 ```
 4. Open controller from coordiator:
-```
+```swift
     private func showLogin() {
         let controller = MyViewController()
         navigate(to: .push(controller))
     }
 ```
 5. Or open other `Coordinator` from `MyCoordinator` as example:
-```
+```swift
     private func showLogin() {
         let loginCoordinator = LoginCoordinator(navigationController: navigationController)
         add(loginCoordinator) // add this to store strong reference in MyCoordinator
