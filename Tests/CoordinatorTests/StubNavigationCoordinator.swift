@@ -7,7 +7,9 @@
 
 import Coordinator
 import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
 
 class StubNavigationCoordinator: NavigationCoordinator<StubMeta> {
     

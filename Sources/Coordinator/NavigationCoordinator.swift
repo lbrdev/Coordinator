@@ -6,7 +6,9 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// UINavigation stack coordinator with auto finish
 open class NavigationCoordinator<M: CoordinationMeta>: Coordinator<M>, UINavigationControllerDelegate, UIAdaptivePresentationControllerDelegate {

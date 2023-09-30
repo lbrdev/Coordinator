@@ -5,7 +5,9 @@
 //  Created by Ihor Kandaurov on 16.05.2022.
 //
 
+#if canImport(UIKit)
 import UIKit
+#endif
 
 extension UINavigationController {
     func pushViewController(
